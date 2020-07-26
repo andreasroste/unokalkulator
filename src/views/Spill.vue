@@ -179,10 +179,13 @@ export default {
         this.poeng = result;
     },
     leggtilnyspiller() {
+        if(this.runde != 1){
+            this.poengtavle[this.runde-2][this.spillere.length-1] = this.median;
+            localStorage.setItem('poengtavle', JSON.stringify(this.poengtavle));
+        }
+
         this.spillere.push(this.nyspillernavn);
-        this.poengtavle[this.runde-2][this.spillere.length-1] = this.median;
         localStorage.setItem('spillere', JSON.stringify(this.spillere));
-        localStorage.setItem('poengtavle', JSON.stringify(this.poengtavle));
         this.nyspillernavn = '';
         this.regnpoeng();
     },

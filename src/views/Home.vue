@@ -1,7 +1,8 @@
 <template>
   <div class="center">
     <h1>UNO kalkulator</h1>
-    <v-btn block color="primary" @click="$router.push('/start')">Start</v-btn>
+    <v-btn block color="primary" class="my-5" @click="$router.push('/start')">Start nytt spill</v-btn>
+    <v-btn block color="green" class="my-5" v-if="aktivt" @click="$router.push('/spill')">Fortsett</v-btn>
     <p class="text-caption my-8">Andreas Røste &copy; 2020</p>
   </div>
 </template>
@@ -23,6 +24,16 @@
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
+  data: () => {
+    return {
+      aktivt: false
+    }
+  },
+  mounted() {
+    if(localStorage.getItem('spillere') != null){
+      this.aktivt = true;
+    }
+  }
 };
 </script>
