@@ -47,6 +47,35 @@
       </v-card-text>
     </v-card>
 
+    <v-card>
+      <v-card-title>Runder</v-card-title>
+      <v-card-text>
+        <v-expansion-panels>
+          <v-expansion-panel v-for="(runde, key) in runder" :key="key">
+            <v-expansion-panel-header
+              >Runde {{ key + 1 }}</v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <v-simple-table>
+                <thead>
+                  <tr>
+                    <th>Navn</th>
+                    <th>Poeng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(poeng, spillerid) in runde" :key="spillerid">
+                    <td>{{ spillere[spillerid] }}</td>
+                    <td>{{ poeng }}</td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card-text>
+    </v-card>
+
     <v-dialog v-model="vunnetdialog">
       <v-card>
         <v-toolbar dark color="primary">

@@ -16,19 +16,27 @@
       <thead>
         <tr>
           <th>Navn</th>
+          <th>Gruppe</th>
           <th>Deltagelse</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(spiller, id) in registrerte_spillere" :key="id">
-          <td>{{ spiller }}</td>
+          <td>{{ spiller.navn }}</td>
+          <td>{{ spiller.gruppe }}</td>
           <td v-if="!spillende_keys.includes(id)">
-            <v-btn @click="leggTilSpiller(spiller, id)" small color="accent"
+            <v-btn
+              @click="leggTilSpiller(spiller.navn, id)"
+              small
+              color="accent"
               ><v-icon small left>mdi-plus</v-icon>Legg til</v-btn
             >
           </td>
           <td v-if="spillende_keys.includes(id)">
-            <v-btn @click="fjernSpiller(spiller, id)" small color="secondary"
+            <v-btn
+              @click="fjernSpiller(spiller.navn, id)"
+              small
+              color="secondary"
               ><v-icon small left>mdi-minus</v-icon>Fjern</v-btn
             >
           </td>
@@ -54,6 +62,11 @@
             v-model="ny_navn"
             label="Navn på spilleren"
           ></v-text-field>
+          <v-select
+            :items="grupper"
+            label="Gruppe"
+            v-model="ny_gruppe"
+          ></v-select>
           <v-checkbox label="Reglene for UNO er lest og forstått"></v-checkbox>
           <v-btn
             color="secondary"
@@ -85,12 +98,14 @@ export default {
   name: "Home",
   data() {
     return {
-      registrerte_spillere: [],
+      registrerte_spillere: {},
       spillende_keys: [],
       spillende: [],
       overlay: true,
       ny_dialog: false,
-      ny_navn: ""
+      ny_navn: "",
+      grupper: [],
+      ny_gruppe: ""
     };
   },
   mounted() {
@@ -103,6 +118,9 @@ export default {
       .then(() => {
         vm.overlay = false;
       });
+    axios.get("/grupper.json?" + new Date().getTime()).then(e => {
+      vm.grupper = Object.values(e.data);
+    });
   },
   methods: {
     startSpillet() {
@@ -133,7 +151,8 @@ export default {
       axios
         .post("/admin.php", {
           mode: "add",
-          navn: this.ny_navn
+          navn: this.ny_navn,
+          gruppe: this.ny_gruppe
         })
         .then(() => {
           vm.ny_dialog = false;
