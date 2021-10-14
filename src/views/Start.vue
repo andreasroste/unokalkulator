@@ -12,37 +12,36 @@
     >
     <h1>Fortell meg...</h1>
     Hvem skal være med?
-    <v-simple-table>
-      <thead>
-        <tr>
-          <th>Navn</th>
-          <th>Gruppe</th>
-          <th>Deltagelse</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(spiller, id) in registrerte_spillere" :key="id">
-          <td>{{ spiller.navn }}</td>
-          <td>{{ spiller.gruppe }}</td>
-          <td v-if="!spillende_keys.includes(id)">
-            <v-btn
-              @click="leggTilSpiller(spiller.navn, id)"
-              small
-              color="accent"
-              ><v-icon small left>mdi-plus</v-icon>Legg til</v-btn
-            >
-          </td>
-          <td v-if="spillende_keys.includes(id)">
-            <v-btn
-              @click="fjernSpiller(spiller.navn, id)"
-              small
-              color="secondary"
-              ><v-icon small left>mdi-minus</v-icon>Fjern</v-btn
-            >
-          </td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <v-data-table
+      :headers="headers"
+      :items="registrerte_spillere"
+      disable-pagination
+    >
+      <template v-slot:item.leggtil="{ item }">
+        <div
+          v-if="!spillende_keys.includes(registrerte_spillere.indexOf(item))"
+        >
+          <v-btn
+            @click="
+              leggTilSpiller(item.navn, registrerte_spillere.indexOf(item))
+            "
+            small
+            color="accent"
+          >
+            <v-icon small left>mdi-plus</v-icon>Legg til
+          </v-btn>
+        </div>
+        <div v-if="spillende_keys.includes(registrerte_spillere.indexOf(item))">
+          <v-btn
+            @click="fjernSpiller(item.navn, registrerte_spillere.indexOf(item))"
+            small
+            color="secondary"
+          >
+            <v-icon small left>mdi-minus</v-icon>Fjern
+          </v-btn>
+        </div>
+      </template>
+    </v-data-table>
 
     <v-btn color="primary" block style="margin-top: 20px" @click="startSpillet"
       >Begynn spillet</v-btn
@@ -57,7 +56,7 @@
             ><v-icon>mdi-close</v-icon></v-btn
           >
         </v-toolbar>
-        <v-card-text style="padding-top: 20px;">
+        <v-card-text style="padding-top: 20px">
           <v-text-field
             v-model="ny_navn"
             label="Navn på spilleren"
@@ -77,7 +76,7 @@
           <v-btn
             color="primary"
             block
-            style="margin-top: 20px;"
+            style="margin-top: 20px"
             @click="nySpiller()"
             >Legg til</v-btn
           >
@@ -98,14 +97,19 @@ export default {
   name: "Home",
   data() {
     return {
-      registrerte_spillere: {},
+      registrerte_spillere: [],
       spillende_keys: [],
       spillende: [],
       overlay: true,
       ny_dialog: false,
       ny_navn: "",
       grupper: [],
-      ny_gruppe: ""
+      ny_gruppe: "",
+      headers: [
+        { text: "Navn", value: "navn", sortable: true, align: "start" },
+        { text: "Gruppe", value: "gruppe", sortable: true },
+        { text: "Legg til", value: "leggtil", sortable: true }
+      ]
     };
   },
   mounted() {

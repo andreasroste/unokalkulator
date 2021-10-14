@@ -1,1 +1,27 @@
-{}
+[
+    {"navn": "Isak Sund", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Tobias Sund", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Magnus Hoelsveen", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Carro", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Tonje Sund", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Andreas R\u00f8ste", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Tobias Farstad", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Lene Kristine R\u00f8ste", "gruppe": "Annen"},
+    {"navn": "Aleksander Saastad", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Stener Storstenvik", "gruppe":"Annen"},
+    {"navn": "Sofia", "gruppe":"Annen"},
+    {"navn": "Agnes", "gruppe":"Annen"},
+    {"navn": "Kristian Ruud", "gruppe":"Speider - ØBK - Jevnaker"},
+    {"navn": "Bertine Jensen", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Christian H. Magnussen", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Ingrid Foslien", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Nikolaj Holm", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Trond Anders Nordby", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Mik", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Amund Pettersen", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Sondre Moholdt", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Sigrid Nordby", "gruppe":"Speider - ØBK - Hønefoss"},
+    {"navn": "Karoline Kagnes", "gruppe":"Speider - Annen i NSF"},
+    {"navn": "Jacob Haugnes", "gruppe":"Speider - Annen i NSF"},
+    {"navn": "Syn\u00f8ve Flatberg", "gruppe":"Speider - Annen i NSF"}
+]

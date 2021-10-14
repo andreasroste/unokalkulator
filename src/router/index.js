@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Start from "../views/Start.vue";
 import Spill from "../views/Spill.vue";
 import Admin from "../views/Admin.vue";
+import Statistikk from "../views/Statistikk.vue";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: "/admin",
     name: "admin",
     component: Admin
+  },
+  {
+    path: "/statistikk",
+    name: "statistikk",
+    component: Statistikk
   }
 ];
 

@@ -158,7 +158,7 @@
             </thead>
             <tbody>
               <tr v-for="(spiller, id) in registrerte_spillere" :key="id">
-                <td>{{ spiller }}</td>
+                <td>{{ spiller.navn }}</td>
                 <td v-if="!spillende_keys.includes(id)">
                   <v-btn
                     @click="leggTilSpiller(spiller, id)"

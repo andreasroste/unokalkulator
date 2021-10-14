@@ -1,1 +1,35 @@
-[]
+[
+    {},
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    {
+    "dato": "2021-08-27T22:14:04.233Z",
+    "poengtavle": [
+    {
+    "navn": "Andreas Røste",
+    "poeng": 1116
+    },
+    {
+    "navn": "Nikolaj Holm",
+    "poeng": 52
+    },
+    {
+    "navn": "Bertine Jensen",
+    "poeng": 104
+    },
+    {
+    "navn": "Sondre Moholdt",
+    "poeng": 479
+    }
+    ]
+    },
+    null,
+    {},
+    {}
+    ]
