@@ -12,10 +12,14 @@
     >
     <h1>Fortell meg...</h1>
     Hvem skal være med?
+    <v-text-field v-model="sok" append-icon="mdi-magnify" label="Søk"></v-text-field>
     <v-data-table
       :headers="headers"
       :items="registrerte_spillere"
       disable-pagination
+      hide-default-footer
+      :items-per-page="-1"
+      :search="sok"
     >
       <template v-slot:item.leggtil="{ item }">
         <div
@@ -104,6 +108,7 @@ export default {
       ny_dialog: false,
       ny_navn: "",
       grupper: [],
+      sok: '',
       ny_gruppe: "",
       headers: [
         { text: "Navn", value: "navn", sortable: true, align: "start" },
@@ -139,6 +144,7 @@ export default {
     leggTilSpiller(spiller, id) {
       this.spillende.push(spiller);
       this.spillende_keys.push(id);
+      this.sok = '';
     },
     fjernSpiller(spiller, id) {
       this.spillende = this.spillende.filter(item => {

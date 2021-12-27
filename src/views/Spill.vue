@@ -18,21 +18,17 @@
       @click="poengdialog = true"
       >Legg inn poeng</v-btn
     >
+
     <v-card>
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th>Navn</th>
-            <th>Poeng</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(spiller, id) in spillere" :key="id">
-            <td>{{ spiller }}</td>
-            <td>{{ poeng[id] }}</td>
-          </tr>
-        </tbody>
-      </v-simple-table>
+      <v-card-title>Poeng</v-card-title>
+      <v-data-table
+        :headers="table_spillere_headers"
+        :items="poeng"
+        disable-pagination
+        disable-filtering
+        hide-default-footer
+        :items-per-page="-1">
+      </v-data-table>
     </v-card>
 
     <v-card style="margin-top: 30px">
@@ -47,7 +43,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card>
+    <v-card style="margin-top: 30px">
       <v-card-title>Runder</v-card-title>
       <v-card-text>
         <v-expansion-panels>
@@ -197,7 +193,12 @@ export default {
       ny_dialog: false,
       registrerte_spillere: [],
       spillende: [],
-      spillende_keys: []
+      spillende_keys: [],
+      poeng: [],
+      table_spillere_headers: [
+        {text: "Navn", align: "left", sortable: true, value: "navn"},
+        {text: "Poeng", align: "left", sortable: true, value: "poeng"},
+      ]
     };
   },
   mounted() {
@@ -209,6 +210,8 @@ export default {
     this.spillende_keys = JSON.parse(localStorage.getItem("spillere_keys"));
     if (localStorage.getItem("runder"))
       this.runder = JSON.parse(localStorage.getItem("runder"));
+
+    this.genererpoengtavle();
 
     let vm = this;
 
@@ -223,11 +226,16 @@ export default {
   },
   methods: {
     lagreRunde() {
+      // Lagrer runde i localstorage.
       this.runder.push(this.poeng_runde);
       this.poeng_runde = {};
       this.poengdialog = false;
       localStorage.setItem("runder", JSON.stringify(this.runder));
 
+      // Blokka endrer poengtabellen som vises i nettleseren
+      this.genererpoengtavle();
+
+      // Sjekk om noen har vunnet
       if (Math.max(...Object.values(this.poeng)) >= 500)
         this.vunnetdialog = true;
     },
@@ -258,6 +266,7 @@ export default {
         .then(() => {
           vm.ikkelagret = false;
           vm.vunnetdialog = false;
+          vm.$router.push("/");
         });
     },
     leggTilSpiller(spiller, id) {
@@ -306,20 +315,38 @@ export default {
       this.spillende_keys = this.spillende_keys.filter(item => {
         return item !== id;
       });
+    },
+    genererpoengtavle() {
+      let poeng = [];
+      let vm = this;
+      Object.keys(this.spillere).forEach(key => {
+        let allepoeng = 0;
+        vm.runder.forEach(runde => {
+          if (key in runde) {
+            allepoeng += parseInt(runde[key]);
+          } else {
+            allepoeng += 0;
+          }
+        });
+        poeng.push({navn: vm.spillere[key], poeng: allepoeng})
+      });
+      vm.poeng = poeng;
+      return true;
     }
   },
   computed: {
-    poeng() {
+    poengg() {
       let poeng = {};
       let vm = this;
       Object.keys(this.spillere).forEach(key => {
-        poeng[key] = 0;
+        let allepoeng = 0;
         vm.runder.forEach(runde => {
           if (key in runde) {
-            poeng[key] += parseInt(runde[key]);
+            allepoeng += parseInt(runde[key]);
           } else {
-            poeng[key] += 0;
+            allepoeng += 0;
           }
+          poeng[key] = {navn: vm.spillere[key], poeng: allepoeng}
         });
       });
       return poeng;
