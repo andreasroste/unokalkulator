@@ -17,6 +17,7 @@
       :headers="headers"
       :items="registrerte_spillere"
       disable-pagination
+      :mobile-breakpoint="0"
       hide-default-footer
       :items-per-page="-1"
       :search="sok"

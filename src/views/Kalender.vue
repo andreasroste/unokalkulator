@@ -1,23 +1,40 @@
 <template>
   <v-container>
-      <v-alert type="info" prominent>Denne siden er ikke ferdig. Ting som skal legges inn;
-          <ul>
-            <li>Antall seire</li>
-            <li>Vinn/tap-prosent</li>
-            <li>Annet...?</li>
-          </ul>
-      </v-alert>
-    <h1>Statistikk</h1>
+    <h1>Spillkalender</h1>
     <v-btn to="/">Tilbake</v-btn>
-    <v-data-table
-        :headers="table_spillere_headers"
-        :items="spillere"
-        disable-pagination
-        disable-filtering
-        :mobile-breakpoint="0"
-        hide-default-footer
-        :items-per-page="-1">
-    </v-data-table>
+        <v-card>
+          <v-btn
+        icon
+        class="ma-2"
+        @click="$refs.calendar.prev()"
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        class="ma-2"
+        @click="$refs.calendar.next()"
+      >
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+          <v-calendar
+            ref="calendar"
+            v-model="cal_model"
+            :events="events"
+            type="month"
+            @click:event="selectEvent">
+          </v-calendar>
+          <h2>Spill</h2>
+          <v-data-table
+            :headers="table_spillere_headers"
+            :items="selectedEvent.poengtavle"
+            disable-pagination
+            :mobile-breakpoint="0"
+            disable-filtering
+            hide-default-footer
+            :items-per-page="-1">
+          </v-data-table>
+        </v-card>
   </v-container>
 </template>
 
@@ -28,14 +45,13 @@ export default {
   data() {
     return {
       data: [],
-      spillere: [],
       data_spiller: {},
       events: [],
       cal_model: '',
       selectedEvent: '',
       table_spillere_headers: [
         {text: "Navn", align: "left", sortable: true, value: "navn"},
-        {text: "Antall spill", align: "left", sortable: true, value: "antall_spill"},
+        {text: "Poeng", align: "left", sortable: true, value: "poeng"},
       ]
     };
   },
@@ -54,15 +70,6 @@ export default {
           });
         });
       });
-
-      vm.spillere = Object.keys(vm.data_spiller).map(navn => {
-          return {
-              navn,
-              antall_spill: vm.data_spiller[navn].length,
-              spill: vm.data_spiller[navn]
-          }
-      });
-
       vm.data = data;
 
       vm.events = data.map(spill => {

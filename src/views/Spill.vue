@@ -27,6 +27,7 @@
         disable-pagination
         disable-filtering
         hide-default-footer
+        :mobile-breakpoint="0"
         :items-per-page="-1">
       </v-data-table>
     </v-card>
@@ -80,21 +81,19 @@
         </v-toolbar>
         <v-card-text style="padding-top: 20px">
           <h1>Gratulerer med seieren, {{ ledendeSpiller }}</h1>
+          <br>
           <h3>Poengtavle</h3>
-          <v-simple-table>
-            <thead>
-              <tr>
-                <th>Navn</th>
-                <th>Poeng</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(spiller, id) in spillere" :key="id">
-                <td>{{ spiller }}</td>
-                <td>{{ poeng[id] }}</td>
-              </tr>
-            </tbody>
-          </v-simple-table>
+          <v-data-table
+            :headers="table_spillere_headers"
+            :items="poeng"
+            disable-pagination
+            disable-filtering
+            :mobile-breakpoint="0"
+            hide-default-footer
+            :items-per-page="-1">
+          </v-data-table>
+          <p>Gi spillet et navn, og lagre og arkiver spillet!</p>
+          <v-text-field v-model="spilletsnavn" label="Navn på spill"></v-text-field>
           <v-btn v-if="ikkelagret" block @click="lagreSpill()"
             >Lagre og arkivèr spill</v-btn
           >
@@ -194,6 +193,7 @@ export default {
       registrerte_spillere: [],
       spillende: [],
       spillende_keys: [],
+      spilletsnavn: '',
       poeng: [],
       table_spillere_headers: [
         {text: "Navn", align: "left", sortable: true, value: "navn"},
@@ -236,8 +236,9 @@ export default {
       this.genererpoengtavle();
 
       // Sjekk om noen har vunnet
-      if (Math.max(...Object.values(this.poeng)) >= 500)
-        this.vunnetdialog = true;
+      this.poeng.forEach(spillerpoeng => {
+        if(spillerpoeng.poeng >= 500) this.vunnetdialog = true;
+      });
     },
     lagreSpill() {
       let poengtavle = [];
@@ -255,6 +256,7 @@ export default {
       });
 
       let spill = {
+        navn: vm.spilletsnavn,
         dato: new Date(),
         poengtavle
       };
@@ -335,22 +337,6 @@ export default {
     }
   },
   computed: {
-    poengg() {
-      let poeng = {};
-      let vm = this;
-      Object.keys(this.spillere).forEach(key => {
-        let allepoeng = 0;
-        vm.runder.forEach(runde => {
-          if (key in runde) {
-            allepoeng += parseInt(runde[key]);
-          } else {
-            allepoeng += 0;
-          }
-          poeng[key] = {navn: vm.spillere[key], poeng: allepoeng}
-        });
-      });
-      return poeng;
-    },
     ledendeSpiller() {
       let poeng = {};
       let vm = this;
