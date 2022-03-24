@@ -73,6 +73,13 @@
       </v-card-text>
     </v-card>
 
+    <v-card style="margin-top: 30px">
+      <v-card-title>Avslutt</v-card-title>
+      <v-card-text>
+        <v-btn @click="tidligsluttdialog = true">Avslutt spillet tidlig</v-btn>
+      </v-card-text>
+    </v-card>
+
     <v-dialog v-model="vunnetdialog">
       <v-card>
         <v-toolbar dark color="primary">
@@ -130,6 +137,33 @@
             @click="lagreRunde()"
             >Legg inn og begynn ny runde</v-btn
           >
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="tidligsluttdialog" scrollable>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>Slutte tidlig?</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="tidligsluttdialog = false"
+            ><v-icon>mdi-close</v-icon></v-btn
+          >
+        </v-toolbar>
+        <v-card-text style="padding-top: 20px">
+          Vil du avslutte spillet for tidlig?
+          <v-btn
+            color="success"
+            block
+            style="margin: 20px 0"
+            @click="tidligsluttdialog = false"
+            >Nei!!</v-btn>
+          <v-btn
+            color="error"
+            block
+            style="margin: 20px 0"
+            @click="sluttTidlig()"
+            >Ja :/</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -194,6 +228,7 @@ export default {
       spillende: [],
       spillende_keys: [],
       spilletsnavn: '',
+      tidligsluttdialog: false,
       poeng: [],
       table_spillere_headers: [
         {text: "Navn", align: "left", sortable: true, value: "navn"},
@@ -272,11 +307,12 @@ export default {
         });
     },
     leggTilSpiller(spiller, id) {
-      this.spillende.push(spiller);
+      this.spillende.push(spiller.navn);
       this.spillende_keys.push(id);
 
       // Finn median
       let poengarr = Object.values(this.poeng);
+      poengarr = poengarr.map(v => v.poeng);
       poengarr.sort();
       let mid = Math.ceil(poengarr.length / 2);
       let median =
@@ -308,6 +344,7 @@ export default {
         "spillere_keys",
         JSON.stringify(this.spillende_keys)
       );
+      this.genererpoengtavle();
     },
     fjernSpiller(spiller, id) {
       this.spillende = this.spillende.filter(item => {
@@ -334,6 +371,10 @@ export default {
       });
       vm.poeng = poeng;
       return true;
+    },
+    sluttTidlig() {
+      this.vunnetdialog = true;
+      this.tidligsluttdialog = false;
     }
   },
   computed: {
