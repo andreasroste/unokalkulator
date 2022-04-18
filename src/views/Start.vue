@@ -64,7 +64,8 @@
         <v-card-text style="padding-top: 20px">
           <v-text-field
             v-model="ny_navn"
-            label="Navn på spilleren"
+            label="Fullt navn på spilleren"
+            hint="Skriv gjerne fullt navn på spilleren, slik at man kan skille dem fra folk med samme navn"
           ></v-text-field>
           <v-select
             :items="grupper"

@@ -122,6 +122,9 @@
             v-for="(spiller, id) in spillere"
             :key="id"
             :label="spiller"
+            append-outer-icon="mdi-party-popper"
+            @click:append-outer="velgVinner(id)"
+            :disabled="vinner == id"
             type="number"
             v-model="poeng_runde[id]"
             :rules="[
@@ -129,7 +132,8 @@
                 (/^-?\d+$/.test(poeng_runde[id]) && poeng_runde[id] != '') ||
                 'Dette er ikke tall!'
             ]"
-          ></v-text-field>
+          >
+          </v-text-field>
           <v-btn
             color="primary"
             block
@@ -228,6 +232,7 @@ export default {
       spillende: [],
       spillende_keys: [],
       spilletsnavn: '',
+      vinner: '',
       tidligsluttdialog: false,
       poeng: [],
       table_spillere_headers: [
@@ -274,6 +279,9 @@ export default {
       this.poeng.forEach(spillerpoeng => {
         if(spillerpoeng.poeng >= 500) this.vunnetdialog = true;
       });
+
+      // Fjern spilleren som har vunnet fra "legg til runde"-dialogen
+      this.vinner = -1;
     },
     lagreSpill() {
       let poengtavle = [];
@@ -324,7 +332,7 @@ export default {
       let nyspillerkey = Object.keys(this.spillere).length;
 
       console.log("nyspillerkey", nyspillerkey);
-      this.spillere[nyspillerkey] = spiller;
+      this.spillere[nyspillerkey] = spiller.navn;
       console.log("this.spillere", this.spillere);
 
       let nyrundemednyspiller = {};
@@ -375,6 +383,10 @@ export default {
     sluttTidlig() {
       this.vunnetdialog = true;
       this.tidligsluttdialog = false;
+    },
+    velgVinner(id) {
+      this.vinner = id;
+      this.poeng_runde[id] = -20;
     }
   },
   computed: {
